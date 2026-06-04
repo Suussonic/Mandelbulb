@@ -23,7 +23,6 @@ license = [
 ]
 
 [permissions]
-files = "Création et gestion de Node Groups Geometry Nodes dans le fichier Blender courant"
 
 [build]
 paths_exclude_pattern = [
