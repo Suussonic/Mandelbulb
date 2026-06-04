@@ -2,8 +2,10 @@ schema_version = "1.0.0"
 
 id = "mandelbulb"
 version = "1.0.0"
+
 name = "Mandelbulb Generator"
-tagline = "Générateur de fractales de Mandelbulb et Julia"
+tagline = "Generateur de fractales Mandelbulb et Julia"
+
 maintainer = "Suussonic"
 
 type = "add-on"
@@ -13,7 +15,6 @@ website = "https://github.com/Suussonic/Mandelbulb"
 tags = [
     "Add Mesh",
     "Modeling",
-    "Procedural",
 ]
 
 blender_version_min = "5.1.0"
@@ -21,8 +22,6 @@ blender_version_min = "5.1.0"
 license = [
     "SPDX:GPL-3.0-or-later",
 ]
-
-[permissions]
 
 [build]
 paths_exclude_pattern = [
