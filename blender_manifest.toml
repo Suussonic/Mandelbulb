@@ -1,10 +1,10 @@
 schema_version = "1.0.0"
 
 id = "mandelbulb"
-version = "1.0.0"
+version = "1.0.1"
 
 name = "Mandelbulb Generator"
-tagline = "Generateur de fractales Mandelbulb et Julia"
+tagline = "Mandelbulb and Julia Fractal Generator"
 
 maintainer = "Suussonic"
 

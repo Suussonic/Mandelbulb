@@ -1,169 +1,169 @@
 # Mandelbulb
 
-Générateur de fractales **Mandelbulb 3D** pour Blender 5.1.
+**3D Mandelbulb fractal generator** for Blender 5.1.
 
-Cette extension permet de créer et d'explorer des fractales Mandelbulb et Julia directement dans Blender. La géométrie est générée à partir d'un **Signed Distance Field (SDF)** évalué avec NumPy puis converti en maillage grâce à un algorithme **Surface Nets**.
-
----
-
-## Fonctionnalités
-
-* Génération de fractales Mandelbulb 3D
-* Support du mode Julia
-* Paramètre de puissance entièrement animable
-* Distorsions par décalage et torsion
-* Extraction de surface via Surface Nets
-* Mise à jour automatique lors de la modification des paramètres
-* Support de l'animation par images clés
-* Compatible Blender 5.1+
+This add-on allows you to create and explore Mandelbulb and Julia fractals directly inside Blender. Geometry is generated from a **Signed Distance Field (SDF)** evaluated with NumPy and converted into a mesh using the **Surface Nets** algorithm.
 
 ---
 
-## Utilisation
+## Features
 
-### Création d'un Mandelbulb
-
-1. Ouvrir l'onglet **Mandelbulb** dans la Vue 3D.
-2. Cliquer sur **Ajouter Mandelbulb**.
-3. Ajuster les paramètres selon le résultat souhaité.
-
-Le maillage est automatiquement régénéré lorsque les paramètres changent.
-
----
-
-## Paramètres
-
-### Grille SDF
-
-#### Résolution
-
-Nombre de voxels utilisés pour évaluer la fractale.
-
-Valeurs recommandées :
-
-* 32 : aperçu rapide
-* 64 : qualité moyenne
-* 128 : haute qualité
-* 256 : très haute qualité
-
-Une résolution plus élevée produit davantage de détails mais augmente fortement le temps de calcul.
-
-#### Taille grille
-
-Détermine la zone de l'espace explorée autour de l'origine.
+* 3D Mandelbulb fractal generation
+* Julia set mode support
+* Fully animatable power parameter
+* Offset and twist distortions
+* Surface extraction using Surface Nets
+* Automatic updates when parameters change
+* Keyframe animation support
+* Compatible with Blender 5.1+
 
 ---
 
-### Formule Mandelbulb
+## Usage
 
-#### Puissance
+### Creating a Mandelbulb
 
-Exposant de la formule White-Nylander.
+1. Open the **Mandelbulb** tab in the 3D View.
+2. Click **Add Mandelbulb**.
+3. Adjust the parameters to achieve the desired result.
 
-Exemples :
+The mesh is automatically regenerated whenever parameters are modified.
 
-* 2 : formes proches du Mandelbrot tridimensionnel
-* 8 : Mandelbulb classique
-* valeurs non entières : formes expérimentales
+---
 
-#### Itérations max
+## Parameters
 
-Nombre maximal d'itérations utilisées pour tester l'appartenance à l'ensemble.
+### SDF Grid
 
-Des valeurs plus élevées permettent de révéler davantage de détails.
+#### Resolution
 
-#### Rayon d'échappement
+Number of voxels used to evaluate the fractal.
 
-Distance à partir de laquelle un point est considéré comme divergent.
+Recommended values:
 
-La valeur classique est :
+* 32: fast preview
+* 64: medium quality
+* 128: high quality
+* 256: very high quality
+
+Higher resolutions produce more detail but significantly increase computation time.
+
+#### Grid Size
+
+Defines the region of space evaluated around the origin.
+
+---
+
+### Mandelbulb Formula
+
+#### Power
+
+Exponent used in the White–Nylander Mandelbulb formula.
+
+Examples:
+
+* 2: shapes similar to a three-dimensional Mandelbrot set
+* 8: classic Mandelbulb
+* non-integer values: experimental forms
+
+#### Max Iterations
+
+Maximum number of iterations used to determine set membership.
+
+Higher values reveal finer details.
+
+#### Escape Radius
+
+Distance at which a point is considered to have diverged.
+
+The standard value is:
 
 * 2.0
 
 ---
 
-### Mode Julia
+### Julia Mode
 
-Permet de générer une fractale de Julia 3D.
+Generates a 3D Julia fractal.
 
-Lorsque le mode Julia est activé :
+When Julia mode is enabled:
 
-* la constante **c** devient fixe ;
-* la valeur **Julia C** contrôle la forme de la fractale.
+* the constant **c** remains fixed;
+* **Julia C** controls the resulting shape.
 
 ---
 
-### Distorsion
+### Distortion
 
-#### Décalage
+#### Offset
 
-Translate les coordonnées évaluées avant le calcul de la fractale.
+Translates the coordinates before fractal evaluation.
 
-Permet d'explorer différentes régions de l'espace fractal.
+Useful for exploring different regions of fractal space.
 
-#### Torsion
+#### Twist
 
-Ajoute une rotation progressive à chaque itération.
+Applies a progressive rotation at each iteration.
 
-Peut produire des formes hélicoïdales ou torsadées.
+Can create helical, spiraling, or twisted structures.
 
 ---
 
 ### Surface Nets
 
-#### Normales lissées
+#### Smooth Normals
 
-Active le lissage des faces du maillage généré.
+Enables smoothing on the generated mesh.
 
-#### Niveau iso
+#### Iso Level
 
-Détermine le niveau d'extraction de l'isosurface.
+Controls the extraction level of the isosurface.
 
-* 0.0 : surface théorique
-* valeur positive : surface dilatée
-* valeur négative : surface contractée
+* 0.0: theoretical surface
+* positive values: expanded surface
+* negative values: contracted surface
 
 ---
 
 ## Animation
 
-Tous les paramètres peuvent être animés à l'aide d'images clés Blender.
+All parameters can be animated using Blender keyframes.
 
-Exemples :
+Examples:
 
-* animation de la puissance
-* transition entre différentes fractales Julia
-* variation progressive du niveau iso
-* effets de torsion dynamiques
+* power animation
+* transitions between different Julia fractals
+* progressive iso-level variation
+* dynamic twisting effects
 
-L'extension régénère automatiquement les objets Mandelbulb à chaque changement de frame.
-
----
-
-## Fonctionnement interne
-
-Le pipeline de génération est le suivant :
-
-1. Création d'une grille volumique régulière.
-2. Évaluation vectorisée de la distance signée (SDF) avec NumPy.
-3. Calcul de la fractale Mandelbulb à l'aide de la formule de White-Nylander.
-4. Estimation de distance selon la méthode de Hubbard-Douady.
-5. Extraction de l'isosurface via Surface Nets.
-6. Génération du maillage Blender.
-
-Cette approche produit des surfaces plus lisses et plus précises qu'une simple voxelisation.
+The add-on automatically regenerates Mandelbulb objects whenever the current frame changes.
 
 ---
 
-## Dépendances
+## Internal Workflow
 
-* Blender 5.1 ou supérieur
-* NumPy (fourni avec Blender)
+The generation pipeline is as follows:
 
-Aucune dépendance externe supplémentaire n'est requise.
+1. Create a regular volumetric grid.
+2. Evaluate the Signed Distance Field (SDF) using vectorized NumPy operations.
+3. Compute the Mandelbulb fractal using the White–Nylander formula.
+4. Estimate distances using the Hubbard–Douady distance estimator.
+5. Extract the isosurface using Surface Nets.
+6. Generate the final Blender mesh.
+
+This approach produces smoother and more accurate surfaces than simple voxelization methods.
 
 ---
 
-## Licence
+## Requirements
 
-Distribué sous licence GPL 3.0 ou ultérieure.
+* Blender 5.1 or later
+* NumPy (included with Blender)
+
+No additional external dependencies are required.
+
+---
+
+## License
+
+Distributed under the GPL 3.0 License or later.
