@@ -4,7 +4,7 @@ bl_info = {
     "version": (1, 0, 0),
     "blender": (5, 1, 0),
     "location": "View3D > Sidebar > Mandelbulb",
-    "description": "Génère des fractales Mandelbulb 3D",
+    "description": "Generate 3D Mandelbulb fractals",
     "warning": "",
     "doc_url": "https://github.com/Suussonic/Mandelbulb",
     "category": "Add Mesh",
@@ -36,18 +36,18 @@ class MandelbulbProperties(PropertyGroup):
 
     # ── Grille SDF ────────────────────────────────────────────────────────────
     resolution: IntProperty(
-        name="Résolution",
+        name="Resolution",
         description=(
-            "Nombre de voxels par axe (NxNxN). "
-            "Attention : 64³ = 262 144 cellules, 128³ = 2 M"
+            "Number of voxels per axis (NxNxN). "
+            "Warning: 64³ = 262,144 cells, 128³ = 2M"
         ),
         default=56,
-        soft_min=16, soft_max=256,   # ← plage slider; pas de hard-limit bloquante
+        soft_min=16, soft_max=256,
         update=_update_mandelbulb,
     )
     grid_size: FloatProperty(
-        name="Taille grille",
-        description="Demi-largeur du volume évalué (unités Blender)",
+        name="Grid Size",
+        description="Half-width of the evaluated volume (Blender units)",
         default=1.5,
         soft_min=0.2, soft_max=8.0,
         update=_update_mandelbulb,
@@ -55,31 +55,31 @@ class MandelbulbProperties(PropertyGroup):
 
     # ── Paramètres mathématiques ──────────────────────────────────────────────
     power: FloatProperty(
-        name="Puissance",
+        name="Power",
         description=(
-            "Exposant de la formule White-Nylander "
-            "(8 = Mandelbulb classique, 2 = forme Mandelbrot, "
-            "valeurs non-entières = formes exotiques)"
+            "Exponent of the White-Nylander formula "
+            "(8 = classic Mandelbulb, 2 = Mandelbrot shape, "
+            "non-integer values = exotic shapes)"
         ),
         default=8.0,
         soft_min=1.0, soft_max=32.0,
         update=_update_mandelbulb,
     )
     iterations: IntProperty(
-        name="Itérations max",
+        name="Max Iterations",
         description=(
-            "Nombre maximum d'itérations avant de décider "
-            "si un point appartient à l'ensemble"
+            "Maximum number of iterations before deciding "
+            "whether a point belongs to the set"
         ),
         default=10,
         soft_min=1, soft_max=64,
         update=_update_mandelbulb,
     )
     bailout: FloatProperty(
-        name="Rayon d'échappement",
+        name="Bailout Radius",
         description=(
-            "Distance au-delà de laquelle la suite est considérée divergente. "
-            "Valeur standard : 2.0"
+            "Distance beyond which the sequence is considered divergent. "
+            "Standard value: 2.0"
         ),
         default=2.0,
         soft_min=0.5, soft_max=20.0,
@@ -88,52 +88,52 @@ class MandelbulbProperties(PropertyGroup):
 
     # ── Mode Julia ────────────────────────────────────────────────────────────
     julia_mode: BoolProperty(
-        name="Mode Julia",
+        name="Julia Mode",
         description=(
-            "En mode Julia, c est fixé par julia_c "
-            "au lieu d'être égal à la position du point évalué"
+            "In Julia mode, c is fixed by julia_c "
+            "instead of being equal to the evaluated point's position"
         ),
         default=False,
         update=_update_mandelbulb,
     )
     julia_c: FloatVectorProperty(
-        name="Constante Julia (c)",
-        description="Constante c utilisée en mode Julia",
+        name="Julia Constant (c)",
+        description="Constant c used in Julia mode",
         default=(0.0, 0.0, 0.0),
-        soft_min=-3.0, soft_max=3.0,  # plus de hard-limit à ±2
+        soft_min=-3.0, soft_max=3.0,
         update=_update_mandelbulb,
     )
 
     # ── Distorsions ───────────────────────────────────────────────────────────
     offset: FloatVectorProperty(
-        name="Décalage",
-        description="Translation du point d'évaluation (exploration de zones)",
+        name="Offset",
+        description="Translation of the evaluation point (zone exploration)",
         default=(0.0, 0.0, 0.0),
-        soft_min=-5.0, soft_max=5.0,  # était bloqué à ±3
+        soft_min=-5.0, soft_max=5.0,
         update=_update_mandelbulb,
     )
     twist: FloatProperty(
-        name="Torsion",
-        description="Rotation progressive à chaque itération (spirales)",
+        name="Twist",
+        description="Progressive rotation at each iteration (spirals)",
         default=0.0,
-        soft_min=-5.0, soft_max=5.0,  # était bloqué à ±1
+        soft_min=-5.0, soft_max=5.0,
         update=_update_mandelbulb,
     )
 
     # ── Surface Nets ──────────────────────────────────────────────────────────
     smooth_normals: BoolProperty(
-        name="Normales lissées",
-        description="Active le smooth shading sur toutes les faces",
+        name="Smooth Normals",
+        description="Enable smooth shading on all faces",
         default=True,
         update=_update_mandelbulb,
     )
     iso_level: FloatProperty(
-        name="Niveau iso",
+        name="Iso Level",
         description=(
-            "Niveau d'isosurface SDF extrait (0.0 = surface exacte, "
-            "valeur positive = surface gonflée, négative = surface rétrécye)"
+            "SDF isosurface level to extract (0.0 = exact surface, "
+            "positive = inflated surface, negative = shrunk surface)"
         ),
-        default=0.0,       # ← CORRIGÉ : était 0.001, ce qui biaisait la surface
+        default=0.0,
         soft_min=-0.1, soft_max=0.1,
         precision=4,
         update=_update_mandelbulb,
@@ -501,9 +501,9 @@ def regenerate_mandelbulb(obj, context):
 # ─────────────────────────────────────────────────────────────────────────────
 
 class OBJECT_OT_add_mandelbulb(Operator):
-    """Crée un nouvel objet Mandelbulb dans la scène."""
+    """Creates a new Mandelbulb object in the scene."""
     bl_idname  = "mesh.add_mandelbulb"
-    bl_label   = "Ajouter Mandelbulb"
+    bl_label   = "Add Mandelbulb"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -520,23 +520,23 @@ class OBJECT_OT_add_mandelbulb(Operator):
 
         regenerate_mandelbulb(obj, context)
 
-        self.report({'INFO'}, f"Mandelbulb généré ({N}³ = {N**3:,} voxels)")
+        self.report({'INFO'}, f"Mandelbulb generated ({N}³ = {N**3:,} voxels)")
         return {'FINISHED'}
 
 
 class OBJECT_OT_regenerate_mandelbulb(Operator):
-    """Force la régénération du Mandelbulb actif."""
+    """Forces regeneration of the active Mandelbulb."""
     bl_idname  = "mesh.regenerate_mandelbulb"
-    bl_label   = "Régénérer Mandelbulb"
+    bl_label   = "Regenerate Mandelbulb"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
         obj = context.active_object
         if not obj or not obj.get("is_mandelbulb"):
-            self.report({'WARNING'}, "Sélectionnez un objet Mandelbulb")
+            self.report({'WARNING'}, "Please select a Mandelbulb object")
             return {'CANCELLED'}
         regenerate_mandelbulb(obj, context)
-        self.report({'INFO'}, "Mandelbulb régénéré")
+        self.report({'INFO'}, "Mandelbulb regenerated")
         return {'FINISHED'}
 
 
@@ -566,13 +566,13 @@ class VIEW3D_PT_mandelbulb(Panel):
 
         # Grille
         box = layout.box()
-        box.label(text="Grille SDF", icon='GRID')
+        box.label(text="SDF Grid", icon='GRID')
         box.prop(props, "resolution")
         box.prop(props, "grid_size")
 
         # Formule
         box = layout.box()
-        box.label(text="Formule Mandelbulb", icon='FORCE_VORTEX')
+        box.label(text="Mandelbulb Formula", icon='FORCE_VORTEX')
         box.prop(props, "power")
         box.prop(props, "iterations")
         box.prop(props, "bailout")
@@ -586,7 +586,7 @@ class VIEW3D_PT_mandelbulb(Panel):
 
         # Distorsion
         box = layout.box()
-        box.label(text="Distorsion", icon='MOD_WAVE')
+        box.label(text="Distortion", icon='MOD_WAVE')
         box.prop(props, "offset")
         box.prop(props, "twist")
 
